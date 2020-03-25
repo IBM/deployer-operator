@@ -1,6 +1,6 @@
 # Deployer Operator
 
-[![Build](http://prow.purple-chesterfield.com/badge.svg?jobs=images_deployer-operator_postsubmit)](http://http://prow.purple-chesterfield.com/?job=images_deployer-operator_postsubmit)
+[![Build](http://prow.purple-chesterfield.com/badge.svg?jobs=image-deployer-operator-amd64-postsubmit)](http://prow.purple-chesterfield.com/?job=image-deployer-operator-amd64-postsubmit)
 [![GoDoc](https://godoc.org/github.com/IBM/deployer-operator?status.svg)](https://godoc.org/github.com/IBM/deployer-operator)
 [![Go Report Card](https://goreportcard.com/badge/github.com/IBM/deployer-operator)](https://goreportcard.com/report/github.com/IBM/deployer-operator)
 [![Code Coverage](https://codecov.io/gh/IBM/deployer-operator/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/IBM/deployer-operator?branch=master)
