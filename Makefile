@@ -82,6 +82,13 @@ install-operator-sdk:
 	@operator-sdk version 2> /dev/null ; if [ $$? -ne 0 ]; then ./common/scripts/install-operator-sdk.sh; fi
 
 ############################################################
+# install kubebuilder section
+############################################################
+
+install-kubebuilder: 
+	@/usr/local/kubebuilder/bin/kubebuilder version 2> /dev/null ; if [ $$? -ne 0 ]; then ./common/scripts/install-kubebuilder.sh; fi
+
+############################################################
 # work section
 ############################################################
 $(GOBIN):
@@ -115,7 +122,7 @@ lint: lint-all
 # test section
 ############################################################
 
-test:
+test: install-kubebuilder
 	@echo "Running the tests for $(IMAGE_NAME) on $(LOCAL_ARCH)..."
 	@go test $(TESTARGS) ./...
 

@@ -39,6 +39,7 @@ type DeployerSetSpec struct {
 	Deployers       []DeployerSpecDescriptor `json:"deployers,omitempty"`
 }
 
+// DeployerStatusDescriptor describes the status of deployer
 type DeployerStatusDescriptor struct {
 	// NamespacedName of deployer for key
 	Key    string         `json:"key"`
