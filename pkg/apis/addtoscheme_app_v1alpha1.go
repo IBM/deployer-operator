@@ -15,7 +15,7 @@
 package apis
 
 import (
-	"github.ibm.com/IBMPrivateCloud/deployer-operator/pkg/apis/app/v1alpha1"
+	"github.com/IBM/deployer-operator/pkg/apis/app/v1alpha1"
 )
 
 func init() {

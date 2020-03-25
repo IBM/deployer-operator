@@ -8,7 +8,6 @@ require (
 	github.com/onsi/gomega v1.8.1
 	github.com/operator-framework/operator-sdk v0.15.1
 	github.com/spf13/pflag v1.0.5
-	github.ibm.com/IBMPrivateCloud/deployer-operator v0.0.0-20200324140120-f1a680007bf2
 	golang.org/x/net v0.0.0-20191105084925-a882066a44e0
 	k8s.io/api v0.0.0
 	k8s.io/apimachinery v0.0.0
