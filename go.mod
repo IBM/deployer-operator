@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/IBM/multicloud-operators-deployable v0.0.0-20191121134707-a429faaac3b4
 	github.com/IBM/multicloud-operators-subscription v0.0.0-20200207022944-915315edaf5d
+	github.com/kubernetes-sigs/application v0.8.1
 	github.com/onsi/gomega v1.8.1
 	github.com/operator-framework/operator-sdk v0.15.1
 	github.com/spf13/pflag v1.0.5

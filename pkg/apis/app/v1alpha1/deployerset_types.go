@@ -21,9 +21,11 @@ import (
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 const (
+	//IsDefaultDeployer defines annotation used to indicate if a deployer is considered default for a cluster
 	IsDefaultDeployer = "app.ibm.com/is-default-deployer"
 )
 
+// DeployerSpecDescriptor defines the deployer structure
 type DeployerSpecDescriptor struct {
 	// NamespacedName of deployer for key
 	Key  string       `json:"key"`
@@ -39,7 +41,7 @@ type DeployerSetSpec struct {
 	Deployers       []DeployerSpecDescriptor `json:"deployers,omitempty"`
 }
 
-// DeployerStatusDescriptor describes the status of deployer
+// DeployerStatusDescriptor defines the deployer status
 type DeployerStatusDescriptor struct {
 	// NamespacedName of deployer for key
 	Key    string         `json:"key"`

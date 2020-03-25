@@ -28,10 +28,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
+	"github.com/IBM/deployer-operator/pkg/apis/app/v1alpha1"
 	appv1alpha1 "github.com/IBM/deployer-operator/pkg/apis/app/v1alpha1"
 )
 
 const (
+	trueCondition         = "true"
 	packageInfoLogLevel   = 3
 	packageDetailLogLevel = 5
 )
@@ -97,15 +99,18 @@ func (r *ReconcileDeployer) Reconcile(request reconcile.Request) (reconcile.Resu
 
 	var err error
 
-	deployer := &appv1alpha1.Deployer{}
+	deployer := &v1alpha1.Deployer{}
 
 	err = r.Get(context.TODO(), request.NamespacedName, deployer)
 	if err != nil {
 		if errors.IsNotFound(err) {
+			// expected as a result of deployer delete operation.
+			// remove the associated explorer from the explorer handler map
 			r.explorerHandler.removeExplorer(request.NamespacedName)
+		} else {
+			// unexpected error
+			klog.Error("Failed to get deployer from api server with error:", err)
 		}
-
-		klog.Error("Failed to get deployer from api server with error:", err)
 	} else {
 		r.explorerHandler.updateExplorerForDeployer(deployer)
 	}
@@ -133,7 +138,7 @@ func (r *ReconcileDeployer) reconcileDeployerSet() (reconcile.Result, error) {
 
 		annotations := deployer.GetAnnotations()
 		if isdefault, ok := annotations[appv1alpha1.IsDefaultDeployer]; ok {
-			if isdefault == "true" {
+			if isdefault == trueCondition {
 				setspec.DefaultDeployer = desc.Key
 			}
 		}
@@ -148,15 +153,23 @@ func (r *ReconcileDeployer) reconcileDeployerSet() (reconcile.Result, error) {
 			deployerset.Namespace = r.cluster.Namespace
 			setspec.DeepCopyInto(&deployerset.Spec)
 			err = r.hubclient.Create(context.TODO(), deployerset, &client.CreateOptions{})
+			if err != nil {
+				klog.Info("Failed to create deployerset with error: ", err)
+			}
 		}
 	} else {
-		setspec.DeepCopyInto(&deployerset.Spec)
-		err = r.hubclient.Update(context.TODO(), deployerset, &client.UpdateOptions{})
+		// if no deployers present on managed cluster, clean up the deployerset on the hub as well
+		if len(deployerlist.Items) == 0 {
+			if err = r.hubclient.Delete(context.TODO(), deployerset, &client.DeleteOptions{}); err != nil {
+				klog.Error("Failed to delete deployerset in hub with error:", err)
+			}
+		} else {
+			// update the deployerset on hub with the refreshed list of deployers
+			setspec.DeepCopyInto(&deployerset.Spec)
+			if err = r.hubclient.Update(context.TODO(), deployerset, &client.UpdateOptions{}); err != nil {
+				klog.Error("Failed to update deployerset in hub with error:", err)
+			}
+		}
 	}
-
-	if err != nil {
-		klog.Error("Failed to process deployerset in hub with error:", err)
-	}
-
 	return reconcile.Result{}, nil
 }

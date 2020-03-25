@@ -3,7 +3,8 @@
 ## Prerequisite
 
 - git
-- go version v1.12+
+- go version v1.13+
+- operator-sdk v0.15.0
 - Linting Tools
 
     | linting tool | version |

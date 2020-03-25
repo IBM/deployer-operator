@@ -20,6 +20,14 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+var (
+	// AnnotationDiscovered indicates whether a resource has been created as a result of a discovery process
+	AnnotationDiscovered = SchemeGroupVersion.Group + "/hybrid-discovered"
+
+	//AnnotationClusterScope indicates whether discovery should look for resources cluster wide rather then in a specific namespace
+	AnnotationClusterScope = SchemeGroupVersion.Group + "/hybrid-discover-clusterscoped"
+)
+
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 const (
 	SourceObject      = "app.ibm.com/source-object"
@@ -28,18 +36,11 @@ const (
 	DeployerInCluster = "app.ibm.com/deployer-in-cluster"
 )
 
-// DiscoverySpec defines the group-version-resource as well as selector for discovery
-type DiscoverySpec struct {
-	GVRs     []metav1.GroupVersionResource `json:"gvrs,omitempty"`
-	Selector *metav1.LabelSelector         `json:"selector,omitempty"`
-}
-
 // DeployerSpec defines the desired state of Deployer
 type DeployerSpec struct {
 	// Important: Run "operator-sdk generate k8s" to regenerate code after modifying this file
 	// Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html
 	Type         string                  `json:"type"`
-	Discovery    *DiscoverySpec          `json:"discovery,omitempty"`
 	OperatorRef  *corev1.ObjectReference `json:"operatorRef,omitempty"`
 	Capabilities []rbacv1.PolicyRule     `json:"capabilities,omitempty"`
 	ClusterScope bool                    `json:"clusterScope,omitempty"`
