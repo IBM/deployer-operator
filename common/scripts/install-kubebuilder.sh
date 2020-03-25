@@ -23,4 +23,4 @@ echo ">>> Installing Kube Builder version "${RELEASE_VERSION}
 curl -LO https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${RELEASE_VERSION}/kubebuilder_${RELEASE_VERSION}_linux_amd64.tar.gz
 # Install binary
 tar -zxvf  kubebuilder_${RELEASE_VERSION}_linux_amd64.tar.gz
-sudo mv kubebuilder_${RELEASE_VERSION}_linux_amd64 /usr/local/kubebuilder
+mv kubebuilder_${RELEASE_VERSION}_linux_amd64 /usr/local/kubebuilder
