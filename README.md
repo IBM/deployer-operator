@@ -5,7 +5,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/IBM/deployer-operator)](https://goreportcard.com/report/github.com/IBM/deployer-operator)
 [![Code Coverage](https://codecov.io/gh/IBM/deployer-operator/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/IBM/deployer-operator?branch=master)
 [![License](https://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[![Container](https://quay.io/repository/multicloudlab/go-repo-template-amd64)](https://quay.io/repository/multicloudlab/go-repo-template-amd64/status)
+[![Image](https://quay.io/repository/multicloudlab/deployer-operator-amd64/status)](https://quay.io/repository/multicloudlab/deployer-operator-amd64)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

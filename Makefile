@@ -130,7 +130,7 @@ test: install-kubebuilder
 # coverage section
 ############################################################
 
-coverage:
+coverage: install-kubebuilder
 	@common/scripts/codecov.sh $(BUILD_LOCALLY)
 
 ############################################################
