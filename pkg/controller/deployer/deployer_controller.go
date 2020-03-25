@@ -28,7 +28,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
-	"github.com/IBM/deployer-operator/pkg/apis/app/v1alpha1"
 	appv1alpha1 "github.com/IBM/deployer-operator/pkg/apis/app/v1alpha1"
 )
 
@@ -99,7 +98,7 @@ func (r *ReconcileDeployer) Reconcile(request reconcile.Request) (reconcile.Resu
 
 	var err error
 
-	deployer := &v1alpha1.Deployer{}
+	deployer := &appv1alpha1.Deployer{}
 
 	err = r.Get(context.TODO(), request.NamespacedName, deployer)
 	if err != nil {
