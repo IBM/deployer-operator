@@ -22,7 +22,7 @@ import (
 
 const (
 	//IsDefaultDeployer defines annotation used to indicate if a deployer is considered default for a cluster
-	IsDefaultDeployer = "app.ibm.com/is-default-deployer"
+	IsDefaultDeployer = "app.cp4mcm.ibm.com/is-default-deployer"
 )
 
 // DeployerSpecDescriptor defines the deployer structure

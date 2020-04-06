@@ -39,7 +39,7 @@ import (
 )
 
 const (
-	cloudformType = "cloudform"
+	kubevirtType = "kubevirt"
 
 	deployerName      = "test-deployer-operator"
 	deployerNamespace = "default"
@@ -62,7 +62,7 @@ var (
 			Annotations: map[string]string{appv1alpha1.IsDefaultDeployer: "true"},
 		},
 		Spec: appv1alpha1.DeployerSpec{
-			Type: cloudformType,
+			Type: kubevirtType,
 		},
 	}
 
@@ -263,7 +263,7 @@ func TestApplicationDiscovery(t *testing.T) {
 
 		g.Expect(obj.GetKind()).To(gomega.BeElementOf(kinds))
 		g.Expect(deployable.GetLabels()[appLabelSelector]).To(gomega.Equal(applicationName))
-		g.Expect(deployable.GetAnnotations()["app.ibm.com/hybrid-discovered"]).To(gomega.Equal("true"))
+		g.Expect(deployable.GetAnnotations()[appv1alpha1.AnnotationDiscovered]).To(gomega.Equal("true"))
 	}
 
 	// validate annotations created on app resources on managed cluster
@@ -274,7 +274,7 @@ func TestApplicationDiscovery(t *testing.T) {
 	}
 
 	g.Expect(managedClusterClient.Get(context.TODO(), serviceOnManagedCluster, serviceResource)).NotTo(gomega.HaveOccurred())
-	g.Expect(serviceResource.GetAnnotations()["app.ibm.com/hybrid-discovered"]).To(gomega.Equal("true"))
+	g.Expect(serviceResource.GetAnnotations()[appv1alpha1.AnnotationDiscovered]).To(gomega.Equal("true"))
 
 	stsResource := &apps.StatefulSet{}
 	stsOnManagedCluster := types.NamespacedName{
@@ -283,7 +283,7 @@ func TestApplicationDiscovery(t *testing.T) {
 	}
 
 	g.Expect(managedClusterClient.Get(context.TODO(), stsOnManagedCluster, stsResource)).NotTo(gomega.HaveOccurred())
-	g.Expect(stsResource.GetAnnotations()["app.ibm.com/hybrid-discovered"]).To(gomega.Equal("true"))
+	g.Expect(stsResource.GetAnnotations()[appv1alpha1.AnnotationDiscovered]).To(gomega.Equal("true"))
 
 	// don't use defer for cleanup, as we weant to go through reconcile logic to make sure hubclient
 	// cache stays consistent

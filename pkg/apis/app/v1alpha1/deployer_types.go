@@ -26,14 +26,14 @@ var (
 
 	//AnnotationClusterScope indicates whether discovery should look for resources cluster wide rather then in a specific namespace
 	AnnotationClusterScope = SchemeGroupVersion.Group + "/hybrid-discover-clusterscoped"
-)
 
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-const (
-	SourceObject      = "app.ibm.com/source-object"
-	DeployerType      = "app.ibm.com/deployer-type"
-	HostingDeployer   = "app.ibm.com/hosting-deployer"
-	DeployerInCluster = "app.ibm.com/deployer-in-cluster"
+	SourceObject = SchemeGroupVersion.Group + "/source-object"
+
+	DeployerType = SchemeGroupVersion.Group + "/deployer-type"
+
+	HostingDeployer = SchemeGroupVersion.Group + "/hosting-deployer"
+
+	DeployerInCluster = SchemeGroupVersion.Group + "/deployer-in-cluster"
 )
 
 // DeployerSpec defines the desired state of Deployer

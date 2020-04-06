@@ -1,9 +1,9 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: deployersets.app.ibm.com
+  name: deployersets.app.cp4mcm.ibm.com
 spec:
-  group: app.ibm.com
+  group: app.cp4mcm.ibm.com
   names:
     kind: DeployerSet
     listKind: DeployerSetList
