@@ -2,6 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deployer-operator
+  labels:
+    app.kubernetes.io/instance: hybridapplication-operator
+    app.kubernetes.io/managed-by: hybridapplication-operator
+    app.kubernetes.io/name: hybridapplication
 spec:
   replicas: 1
   selector:
@@ -26,9 +30,6 @@ spec:
           readOnlyRootFilesystem: true
           runAsNonRoot: true
           runAsUser: 1001
-          hostIPC: false
-          hostNetwork: false
-          hostPID: false
         command:
         - deployer-operator
         imagePullPolicy: Always

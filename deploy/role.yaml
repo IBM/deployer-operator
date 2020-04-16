@@ -3,6 +3,10 @@ kind: ClusterRole
 metadata:
   creationTimestamp: null
   name: deployer-operator
+  labels:
+    app.kubernetes.io/instance: hybridapplication-operator
+    app.kubernetes.io/managed-by: hybridapplication-operator
+    app.kubernetes.io/name: hybridapplication
 rules:
 - apiGroups:
   - ''
