@@ -3,8 +3,8 @@ kind: CustomResourceDefinition
 metadata:
   name: deployers.app.cp4mcm.ibm.com
   labels:
-    app.kubernetes.io/instance: hybridapplication-operator
-    app.kubernetes.io/managed-by: hybridapplication-operator
+    app.kubernetes.io/instance: deployer-operator
+    app.kubernetes.io/managed-by: deployer-operator
     app.kubernetes.io/name: hybridapplication
 spec:
   group: app.cp4mcm.ibm.com

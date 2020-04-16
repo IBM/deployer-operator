@@ -15,14 +15,21 @@ spec:
     metadata:
       labels:
         name: deployer-operator
+        app.kubernetes.io/instance: hybridapplication-operator
+        app.kubernetes.io/managed-by: hybridapplication-operator
+        app.kubernetes.io/name: hybridapplication
+      annotations:
+        productID: 0123456789abcdef0123456789abcdef
+        productName: some-name
+        productVersion: v1.0.0
     spec:
       serviceAccountName: deployer-operator
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/arch
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/arch
       containers:
       - name: deployer-operator
         # Replace this with the built image name

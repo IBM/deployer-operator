@@ -1,9 +1,0 @@
-apiVersion: app.ibm.com/v1alpha1
-kind: DeployerSet
-metadata:
-  name: default-mydeployer
-spec:
-  deployers:
-  - key: cloudform/builtin
-    spec:
-      type: cloudform
