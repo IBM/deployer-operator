@@ -1,0 +1,6 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployer
+metadata:
+  name: mydeployer
+spec:
+  type: cloudform
