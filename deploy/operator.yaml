@@ -17,6 +17,12 @@ spec:
         name: deployer-operator
     spec:
       serviceAccountName: deployer-operator
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
       containers:
       - name: deployer-operator
         # Replace this with the built image name
