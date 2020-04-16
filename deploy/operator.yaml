@@ -14,30 +14,42 @@ spec:
     spec:
       serviceAccountName: deployer-operator
       containers:
-        - name: deployer-operator
-          # Replace this with the built image name
-          image: REPLACE_IMAGE
-          command:
-          - deployer-operator
-          imagePullPolicy: Always
-          env:
-            - name: WATCH_NAMESPACE
-              value: ''
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: OPERATOR_NAME
-              value: "deployer-operator"
-          livenessProbe:
-            exec:
-              command:
-              - ls
-            initialDelaySeconds: 15
-            periodSeconds: 15
-          readinessProbe:
-            exec:
-              command:
-              - ls
-            initialDelaySeconds: 15
-            periodSeconds: 15
+      - name: deployer-operator
+        # Replace this with the built image name
+        image: quay.io/dlong1/deployer-operator-image:0.1.0
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1001
+          hostIPC: false
+          hostNetwork: false
+          hostPID: false
+        command:
+        - deployer-operator
+        imagePullPolicy: Always
+        env:
+        - name: WATCH_NAMESPACE
+          value: ""
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: OPERATOR_NAME
+          value: "deployer-operator"
+        livenessProbe:
+          exec:
+            command:
+            - ls
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        readinessProbe:
+          exec:
+            command:
+            - ls
+          initialDelaySeconds: 15
+          periodSeconds: 15
