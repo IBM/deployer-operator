@@ -41,7 +41,7 @@ spec:
       containers:
       - name: deployer-operator
         # Replace this with the built image name
-        image: quay.io/dlong1/deployer-operator-image:0.1.0
+        image: quay.io/multicloudlab/deployer-operator:v20200406-80e6633
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
