@@ -44,3 +44,6 @@ Check the [Development Doc](docs/development.md) for how to contribute to the re
 Please refer to [Trouble shooting documentation](docs/trouble_shooting.md) for further info.
 
 ## Hybrid Application References
+
+# PodSecurityPolicy Requirements
+# SecurityContextConstraints Requirements
