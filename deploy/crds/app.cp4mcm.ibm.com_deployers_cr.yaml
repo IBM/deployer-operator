@@ -3,8 +3,8 @@ kind: Deployer
 metadata:
   name: mydeployer
   labels:
-    app.kubernetes.io/instance: hybridapplication-operator
-    app.kubernetes.io/managed-by: hybridapplication-operator
-    app.kubernetes.io/name: hybridapplication
+    app.kubernetes.io/instance: deployer-operator
+    app.kubernetes.io/managed-by: deployer-operator
+    app.kubernetes.io/name: hybridApplication
 spec:
   type: cloudform

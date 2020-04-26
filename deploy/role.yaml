@@ -4,33 +4,13 @@ metadata:
   creationTimestamp: null
   name: deployer-operator
   labels:
-    app.kubernetes.io/instance: hybridapplication-operator
-    app.kubernetes.io/managed-by: hybridapplication-operator
-    app.kubernetes.io/name: hybridapplication
+    app.kubernetes.io/instance: deployer-operator
+    app.kubernetes.io/managed-by: deployer-operator
+    app.kubernetes.io/name: hybridApplication
 rules:
-- apiGroups:
-  - ''
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
-  - apps
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
-  - apps
-  resourceNames:
-  - deployer-operator
-  resources:
-  - deployments/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - app.ibm.com
-  resources:
-  - '*'
-  verbs:
-  - '*'
+  - apiGroups:
+      - "*"
+    resources:
+      - "*"
+    verbs:
+      - "*"

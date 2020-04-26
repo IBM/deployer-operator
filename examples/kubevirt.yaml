@@ -1,4 +1,4 @@
-apiVersion: app.ibm.com/v1alpha1
+apiVersion: app.cp4mcm.ibm.com/v1alpha1
 kind: Deployer
 metadata:
   name: mykv

@@ -3,12 +3,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: deployer-operator
   labels:
-    app.kubernetes.io/instance: hybridapplication-operator
-    app.kubernetes.io/managed-by: hybridapplication-operator
-    app.kubernetes.io/name: hybridapplication
+    app.kubernetes.io/instance: deployer-operator
+    app.kubernetes.io/managed-by: deployer-operator
+    app.kubernetes.io/name: deployer
 subjects:
-- kind: ServiceAccount
-  name: deployer-operator
+  - kind: ServiceAccount
+    name: deployer-operator
+    namespace: default
 roleRef:
   kind: ClusterRole
   name: deployer-operator
