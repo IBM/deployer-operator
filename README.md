@@ -14,9 +14,9 @@
 - [What is the Hybrid Deployable Operator](#what-is-the-hybrid-deployable-operator)
 - [Community, discussion, contribution, and support](#community-discussion-contribution-and-support)
 - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Quick Start](#quick-start)
-    - [Troubleshooting](#troubleshooting)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Troubleshooting](#troubleshooting)
 - [Hybrid Application References](#hybrid-application-references)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -100,10 +100,10 @@ kubectl create -f deploy/operator.yaml
 Alternatively, the operator can run locally using the operator-sdk, using the following steps:
 
 - Start deployer operator
-  - kubeconfig points to a kubernetes cluster with admin priviliege
+- kubeconfig points to a kubernetes cluster with admin priviliege
   - *if you actually have separate hub and managed clusters,
     - use environment variable HUBCLUSTERCONFIGFILE to point to the kubeconfig to hub cluster
-    - use environment variable KUBECONFIG to point to the kubeconfig to managed cluster
+    - environment variable KUBECONFIG to point to the kubeconfig to managed cluster
 
 ```shell
 cd "$GOPATH"/src/github.ibm.com/IBMPrivateCloud/deployer-operator
