@@ -99,10 +99,11 @@ kubectl create -f deploy/operator.yaml
 
 Alternatively, the operator can run locally using the operator-sdk, using the following steps:
 
-- kubeconfig points to a kubernetes cluster with admin priviliege
-- *if you actually have separate hub and managed clusters,
-- use environment variable HUBCLUSTERCONFIGFILE to point to the kubeconfig to hub cluster
-- use environment variable KUBECONFIG to point to the kubeconfig to managed cluster
+- Start deployer operator
+  - kubeconfig points to a kubernetes cluster with admin priviliege
+  - *if you actually have separate hub and managed clusters,
+    - use environment variable HUBCLUSTERCONFIGFILE to point to the kubeconfig to hub cluster
+    - use environment variable KUBECONFIG to point to the kubeconfig to managed cluster
 
 ```shell
 cd "$GOPATH"/src/github.ibm.com/IBMPrivateCloud/deployer-operator
