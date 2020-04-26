@@ -101,7 +101,7 @@ Alternatively, the operator can run locally using the operator-sdk, using the fo
 
 - Start deployer operator
 - kubeconfig points to a kubernetes cluster with admin priviliege
-  - *if you actually have separate hub and managed clusters,
+  - **Note:** if you actually have separate hub and managed clusters,
     - use environment variable HUBCLUSTERCONFIGFILE to point to the kubeconfig to hub cluster
     - environment variable KUBECONFIG to point to the kubeconfig to managed cluster
 
