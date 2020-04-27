@@ -12,44 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package deployer
+package application
 
 import (
-	"context"
 	"log"
 	"os"
 	"path/filepath"
 	"sync"
 	"testing"
 
-	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
-	"sigs.k8s.io/controller-runtime/pkg/client"
+	"k8s.io/client-go/tools/cache"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	"github.com/onsi/gomega"
 
 	apis "github.com/IBM/deployer-operator/pkg/apis"
 )
 
-const (
-	clusterNameOnHub      = "reave"
-	clusterNamespaceOnHub = "reave"
-)
-
 var (
 	managedClusterConfig *rest.Config
 	hubClusterConfig     *rest.Config
-
-	// managed cluster namespace on hub
-	clusterOnHub = types.NamespacedName{
-		Name:      clusterNameOnHub,
-		Namespace: clusterNamespaceOnHub,
-	}
 )
 
 func TestMain(m *testing.M) {
@@ -61,7 +46,7 @@ func TestMain(m *testing.M) {
 		},
 	}
 
-	// add eployer-operator scheme
+	// add deployer-operator scheme
 	err := apis.AddToScheme(scheme.Scheme)
 	if err != nil {
 		log.Fatal(err)
@@ -96,66 +81,83 @@ func TestMain(m *testing.M) {
 
 const waitgroupDelta = 1
 
-type HubClient struct {
-	client.Client
-	createCh chan runtime.Object
-	deleteCh chan runtime.Object
-	updateCh chan runtime.Object
+type ApplicationSync struct {
+	*ReconcileApplication
+	createCh chan interface{}
+	updateCh chan interface{}
+	deleteCh chan interface{}
 }
 
-func (hubClient HubClient) Create(ctx context.Context, obj runtime.Object, opts ...client.CreateOption) error {
-	err := hubClient.Client.Create(ctx, obj, opts...)
+func (as ApplicationSync) start() {
+	as.stop()
+	// generic explorer
+	as.stopCh = make(chan struct{})
+	handler := cache.ResourceEventHandlerFuncs{
+		AddFunc: func(newObj interface{}) {
+			as.syncCreateApplication(newObj)
+		},
+		UpdateFunc: func(old, newObj interface{}) {
+			as.syncUpdateApplication(old, newObj)
+		},
+		DeleteFunc: func(old interface{}) {
+			as.syncRemoveApplication(old)
+		},
+	}
+
+	as.dynamicMCFactory.ForResource(as.explorer.GVKGVRMap[applicationGVK]).Informer().AddEventHandler(handler)
+
+	as.stopCh = make(chan struct{})
+	as.dynamicMCFactory.Start(as.stopCh)
+}
+
+func (as ApplicationSync) stop() {
+	if as.stopCh != nil {
+		as.dynamicMCFactory.WaitForCacheSync(as.stopCh)
+		close(as.stopCh)
+	}
+	as.stopCh = nil
+}
+
+func (as ApplicationSync) syncCreateApplication(obj interface{}) {
+	as.ReconcileApplication.syncCreateApplication(obj)
 	// non-blocking operation
 	select {
-	case hubClient.createCh <- obj:
+	case as.createCh <- obj:
 	default:
 	}
-	return err
-}
 
-func (hubClient HubClient) Delete(ctx context.Context, obj runtime.Object, opts ...client.DeleteOption) error {
-	err := hubClient.Client.Delete(ctx, obj, opts...)
+}
+func (as ApplicationSync) syncUpdateApplication(old, newObj interface{}) {
+	as.ReconcileApplication.syncUpdateApplication(old, newObj)
 	// non-blocking operation
 	select {
-	case hubClient.deleteCh <- obj:
+	case as.updateCh <- newObj:
 	default:
 	}
-	return err
-}
 
-func (hubClient HubClient) Update(ctx context.Context, obj runtime.Object, opts ...client.UpdateOption) error {
-	err := hubClient.Client.Update(ctx, obj, opts...)
+}
+func (as ApplicationSync) syncRemoveApplication(old interface{}) {
+	as.ReconcileApplication.syncRemoveApplication(old)
 	// non-blocking operation
 	select {
-	case hubClient.updateCh <- obj:
+	case as.deleteCh <- old:
 	default:
 	}
-	return err
+
 }
 
-func SetupHubClient(innerClient client.Client) client.Client {
-	cCh := make(chan runtime.Object, 5)
-	dCh := make(chan runtime.Object, 5)
-	uCh := make(chan runtime.Object, 5)
+func SetupApplicationSync(inner *ReconcileApplication) ReconcileApplicationInterface {
+	cCh := make(chan interface{}, 5)
+	uCh := make(chan interface{}, 5)
+	dCh := make(chan interface{}, 5)
 
-	hubClient := HubClient{
-		Client:   innerClient,
-		createCh: cCh,
-		deleteCh: dCh,
-		updateCh: uCh,
+	appSync := ApplicationSync{
+		ReconcileApplication: inner,
+		createCh:             cCh,
+		updateCh:             uCh,
+		deleteCh:             dCh,
 	}
-	return hubClient
-}
-
-func SetupTestReconcile(inner reconcile.Reconciler) (reconcile.Reconciler, chan reconcile.Request) {
-	requests := make(chan reconcile.Request)
-	fn := reconcile.Func(func(req reconcile.Request) (reconcile.Result, error) {
-		result, err := inner.Reconcile(req)
-		requests <- req
-		return result, err
-	})
-
-	return fn, requests
+	return appSync
 }
 
 // StartTestManager adds recFn

@@ -15,6 +15,9 @@
 package utils
 
 import (
+	"regexp"
+	"strings"
+
 	appv1alpha1 "github.com/IBM/deployer-operator/pkg/apis/app/v1alpha1"
 )
 
@@ -41,4 +44,30 @@ func SetRemoteDeployer(deployer *appv1alpha1.Deployer) {
 	annotations := deployer.GetAnnotations()
 	annotations[appv1alpha1.DeployerInCluster] = "false"
 	deployer.SetAnnotations(annotations)
+}
+
+// StripVersion removes the version part of a GV
+func StripVersion(gv string) string {
+	if gv == "" {
+		return gv
+	}
+
+	re := regexp.MustCompile(`^[vV][0-9].*`)
+	// If it begins with only version, (group is nil), return empty string which maps to core group
+	if re.MatchString(gv) {
+		return ""
+	}
+
+	return strings.Split(gv, "/")[0]
+}
+
+func StripGroup(gv string) string {
+
+	re := regexp.MustCompile(`^[vV][0-9].*`)
+	// If it begins with only version, (group is nil), return empty string which maps to core group
+	if re.MatchString(gv) {
+		return gv
+	}
+
+	return strings.Split(gv, "/")[1]
 }

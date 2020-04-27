@@ -32,17 +32,12 @@ import (
 )
 
 const (
-	trueCondition         = "true"
-	packageInfoLogLevel   = 3
-	packageDetailLogLevel = 5
+	trueCondition = "true"
 )
 
 // Add creates a new Deployer Controller and adds it to the Manager. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
 func Add(mgr manager.Manager, hubconfig *rest.Config, cluster types.NamespacedName) error {
-	eh := &ExplorerHandler{}
-
-	eh.initExplorerHandler(hubconfig, mgr.GetConfig(), cluster)
 
 	hubclient, err := client.New(hubconfig, client.Options{})
 	if err != nil {
@@ -50,12 +45,12 @@ func Add(mgr manager.Manager, hubconfig *rest.Config, cluster types.NamespacedNa
 		return err
 	}
 
-	return add(mgr, newReconciler(mgr, hubclient, cluster, eh))
+	return add(mgr, newReconciler(mgr, hubclient, cluster))
 }
 
 // newReconciler returns a new reconcile.Reconciler
-func newReconciler(mgr manager.Manager, hubclient client.Client, cluster types.NamespacedName, eh *ExplorerHandler) reconcile.Reconciler {
-	return &ReconcileDeployer{Client: mgr.GetClient(), hubclient: hubclient, cluster: cluster, explorerHandler: eh}
+func newReconciler(mgr manager.Manager, hubclient client.Client, cluster types.NamespacedName) reconcile.Reconciler {
+	return &ReconcileDeployer{Client: mgr.GetClient(), hubclient: hubclient, cluster: cluster}
 }
 
 // add adds a new Controller to mgr with r as the reconcile.Reconciler
@@ -83,9 +78,8 @@ type ReconcileDeployer struct {
 	// This client, initialized using mgr.Client() above, is a split client
 	// that reads objects from the cache and writes to the apiserver
 	client.Client
-	cluster         types.NamespacedName
-	hubclient       client.Client
-	explorerHandler *ExplorerHandler
+	cluster   types.NamespacedName
+	hubclient client.Client
 }
 
 // Reconcile reads that state of the cluster for a Deployer object and makes changes based on the state read
@@ -102,16 +96,10 @@ func (r *ReconcileDeployer) Reconcile(request reconcile.Request) (reconcile.Resu
 
 	err = r.Get(context.TODO(), request.NamespacedName, deployer)
 	if err != nil {
-		if errors.IsNotFound(err) {
-			// expected as a result of deployer delete operation.
-			// remove the associated explorer from the explorer handler map
-			r.explorerHandler.removeExplorer(request.NamespacedName)
-		} else {
+		if !errors.IsNotFound(err) {
 			// unexpected error
 			klog.Error("Failed to get deployer from api server with error:", err)
 		}
-	} else {
-		r.explorerHandler.updateExplorerForDeployer(deployer)
 	}
 
 	// Still update deployerset in hub cluster namespace even without deployer Fetch the Deployer instance
