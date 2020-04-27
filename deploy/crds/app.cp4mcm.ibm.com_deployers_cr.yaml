@@ -1,0 +1,10 @@
+apiVersion: app.cp4mcm.ibm.com/v1alpha1
+kind: Deployer
+metadata:
+  name: mydeployer
+  labels:
+    app.kubernetes.io/instance: deployer-operator
+    app.kubernetes.io/managed-by: deployer-operator
+    app.kubernetes.io/name: hybridApplication
+spec:
+  type: cloudform
